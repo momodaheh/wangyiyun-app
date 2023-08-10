@@ -14,4 +14,8 @@
     width: .5rem;
     height: .5rem;
   }
+
+  a{
+    color: #000;
+  }
 </style>

@@ -16,7 +16,7 @@
             <img :src="item.picUrl" alt="" />
             <span class="playCount">
               <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-24gl-play"></use>
+                <use xlink:href="#icon-gl-play"></use>
               </svg>
               {{ changeCount(item.playCount) }}
             </span>

@@ -45,7 +45,7 @@
     </div>
     <div class="item">
       <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-fenxiang_o"></use>
+        <use xlink:href="#icon-yunduanxiazai"></use>
       </svg>
       <span>下载</span>
     </div>
@@ -108,12 +108,13 @@ export default {
 .itemMusicMiddle{
     width: 100%;
     height: 3rem;
-    margin: .2rem;
+    margin: .2rem 0;
     display: flex;
     flex-direction: row;
     .left{
         height: 100%;
         width: 35%;
+        margin: .2rem;
         .img{
             width: 100%;
             height: 100%;
@@ -159,6 +160,7 @@ export default {
     flex-direction: column;
     color: #fff;
     align-items: center;
+    justify-content: center;
     .icon{
       width: 40%;
       height: 40%;

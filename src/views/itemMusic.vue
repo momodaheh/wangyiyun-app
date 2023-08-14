@@ -1,6 +1,7 @@
 <template>
     
     <itemMusicTop />
+    <itemMusicList />
 </template>
 
 <script>
@@ -8,6 +9,7 @@ import {useRoute}from 'vue-router'
 import {onMounted,reactive,}from 'vue'
 import {getMusicItemList} from '../request/api/item'
 import itemMusicTop from '@/components/item/itemMusicTop.vue'
+import itemMusicList from '@/components/item/itemMusicList.vue'
 export default {
     setup(){
         const state =reactive({
@@ -25,6 +27,7 @@ export default {
     },
     components:{
         itemMusicTop,
+        itemMusicList,
     }
 
 }

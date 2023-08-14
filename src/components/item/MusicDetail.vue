@@ -22,10 +22,15 @@
       </svg>
     </div>
   </div>
-  <div class="detailContent">
-    <img src="../../assets/needle-ab.png" alt="" class="img_needle" />
+  <div class="detailContent" v-show="isLyricShow">
+    <img src="../../assets/needle-ab.png" alt="" class="img_needle" :class="{img_needle_active:!isbtnShow}" />
     <img src="../../assets/cd.png" alt="" class="img_cd" />
-    <img :src="sang.al.picUrl" alt="" class="img_ar" />
+    <img :src="sang.al.picUrl" alt="" class="img_ar" :class="{img_ar_active:!isbtnShow,img_ar_pauesd:isbtnShow}" />
+  </div>
+  <div class="musicLyric">
+    <p v-for="item in lyric" :key="item">
+        {{item.lrc}}
+    </p>
   </div>
   <div class="detailFooter">
     <div class="top">
@@ -71,15 +76,38 @@
 
 <script>
 import { Vue3Marquee } from "vue3-marquee";
-import { mapMutations } from 'vuex';
+import { mapMutations,mapState } from 'vuex';
 export default {
   props: ["sang","play","isbtnShow"],
-  setup(props) {
-    console.log(props.sang);
+  data(){
+    return{
+        isLyricShow:false
+    }
   },
   methods:{
     ...mapMutations(['updatedetailShow'])
   },
+  computed:{
+    ...mapState(["lyricKist"]),
+    lyric:function(){
+        let arr;
+        if(this.lyricKist.lyric){
+           arr=this.lyricKist.lyric.split(/[(\r\n)\r\n]+/).map((item)=>{
+            let min =item.slice(1,3);
+            let sec =item.slice(4,6);
+            let mill =item.slice(7,10);
+            let lrc =item.slice(11,item.length);
+            let time=parseInt(min)*60*1000+parseInt(sec)*1000+mill
+            if(isNaN(Number(mill))){
+                 mill =item.slice(7,9);
+                 lrc =item.slice(10,item.length);
+            }
+            return{min,sec,mill,lrc,time}
+        }) 
+        }
+        return arr;
+    }
+  } ,
   components: {
     Vue3Marquee,
   },
@@ -142,7 +170,17 @@ export default {
     top: .2rem;
     left: 46%;
     transform-origin: 0 0;
-    transform: rotate(-10deg);
+    transform: rotate(-13deg);
+    transition: all 2s;
+  }
+  .img_needle_active {
+    width: 2rem;
+    height: 3rem;
+    position: absolute;
+    top: .2rem;
+    left: 46%;
+    transform-origin: 0 0;
+    transform: rotate(0deg);
     transition: all 2s;
   }
   .img_cd{
@@ -158,7 +196,22 @@ export default {
     border-radius: 50%;
     position: absolute;
     bottom: 3rem;
+    animation: rotate_ar 10s linear infinite;//匀速 无限循环
   }
+   .img_ar_active{
+    animation-play-state: running;
+   } 
+   .img_ar_pauesd{
+    animation-play-state: paused;
+   }
+   @keyframes rotate_ar {
+    0%{
+        transform: rotateZ(0deg);
+    }
+    100%{
+        transform: rotateZ(360deg);
+    }
+   }
 }
 .detailFooter{
     width: 100%;
@@ -191,6 +244,19 @@ export default {
             fill:rgb(245,234,234)
         }
         
+    }
+}
+.musicLyric{
+    width: 100%;
+    height: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: .2rem;
+    overflow: scroll;
+    p{
+        color: #5d5b5b;
+        margin-bottom: .4rem;
     }
 }
 </style>

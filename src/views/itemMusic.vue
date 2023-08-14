@@ -18,6 +18,7 @@ export default {
         onMounted(async()=>{
             let id=useRoute().query.id;
             let res =await getMusicItemList(id);
+            console.log(res);
             state.playlist=res.data.playlist
             //防止页面刷新，数据丢失，将数据保存到sessionStorage中
             sessionStorage.setItem('itemDetail',JSON.stringify(state))

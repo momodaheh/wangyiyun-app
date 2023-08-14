@@ -14,7 +14,7 @@
   </div>
   <div class="musicList">
     <div class="musicItem" v-for="(item, i) in playlist1.tracks" :key="i">
-      <div class="left">
+      <div class="left" @click="playMusic(i)">
         <span>{{ i + 1 }}</span>
         <span><h4>{{item.name}}</h4>{{item.ar[0].name}}</span>
       </div>
@@ -31,12 +31,21 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 export default {
   setup() {
     let playlist1;
     playlist1 = JSON.parse(sessionStorage.getItem("itemDetail")).playlist;
     return { playlist1 };
+
   },
+  methods:{
+    playMusic:function(i){
+      this.updateSangList(this.playlist1.tracks)
+      this.updatesangListIndex(i);
+    },
+    ...mapMutations(['updateSangList','updatesangListIndex'])
+  }
 };
 </script>
 

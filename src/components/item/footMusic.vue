@@ -18,7 +18,7 @@
         <use xlink:href="#icon-iconstop"></use>
       </svg>
       <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-liebiao"></use>
+        <use xlink:href="#icon-zu"></use>
       </svg>
     </div>
     <audio
@@ -36,11 +36,21 @@ import MusicDetail from './MusicDetail.vue';
 export default {
   computed: {
     ...mapState(["sangList", "sangListIndex", "isbtnShow","detailShow"]),
+    
+  },
+  data(){
+    return{
+        interVal:0
+    }
+  },
+  mounted(){
+    this.$store.dispatch("getLyric",this.sangList[this.sangListIndex].id)
   },
   components:{
     MusicDetail,
   },
   methods: {
+    
     play: function () {
       if (this.$refs.audio.paused) {
         this.$refs.audio.play();
@@ -50,11 +60,17 @@ export default {
         this.updateIsbtnShow(true);
       }
     },
-    ...mapMutations(["updateIsbtnShow", "updatedetailShow"]),
+    updateTime:function(){
+        setInterval(()=>{
+            this.updateCurrentTime(this.$refs.audio.currentTime)
+        },1000)
+    },
+    ...mapMutations(["updateIsbtnShow", "updatedetailShow","updateCurrentTime"]),
   },
   watch: {
     sangListIndex: function () {
       this.$refs.audio.autoplay = true;
+      this.$store.dispatch("getLyric",this.sangList[this.sangListIndex].id)
       if (this.$refs.audio.paused) {
         this.updateIsbtnShow(false);
       }

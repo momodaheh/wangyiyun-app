@@ -25,18 +25,21 @@
       ref="audio" :src="`https://music.163.com/song/media/outer/url?id=${sangList[sangListIndex].id}`"
     ></audio>
     <van-popup v-model:show="detailShow" position="right" :style="{ width: '100%', height: '100%' }" >
-        sdfsdf
+        <MusicDetail :sang="sangList[sangListIndex]" :play="play" :isbtnShow="isbtnShow" />
     </van-popup>
   </div>
 </template>
 
 <script>
 import { mapMutations, mapState } from "vuex";
+import MusicDetail from './MusicDetail.vue';
 export default {
   computed: {
     ...mapState(["sangList", "sangListIndex", "isbtnShow","detailShow"]),
   },
-
+  components:{
+    MusicDetail,
+  },
   methods: {
     play: function () {
       if (this.$refs.audio.paused) {

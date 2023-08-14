@@ -30,8 +30,8 @@ export default createStore({
     updatesangListIndex:function(state,value){
       state.sangListIndex=value;
     },
-    updatedetailShow:function(state,value){
-      state.detailShow=value;
+    updatedetailShow:function(state){
+      state.detailShow=!state.detailShow;
     },
   },
   actions: {},

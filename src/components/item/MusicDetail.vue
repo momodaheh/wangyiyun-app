@@ -22,13 +22,13 @@
       </svg>
     </div>
   </div>
-  <div class="detailContent" v-show="isLyricShow">
+  <div class="detailContent" v-show="!isLyricShow">
     <img src="../../assets/needle-ab.png" alt="" class="img_needle" :class="{img_needle_active:!isbtnShow}" />
     <img src="../../assets/cd.png" alt="" class="img_cd" />
     <img :src="sang.al.picUrl" alt="" class="img_ar" :class="{img_ar_active:!isbtnShow,img_ar_pauesd:isbtnShow}" />
   </div>
-  <div class="musicLyric">
-    <p v-for="item in lyric" :key="item">
+  <div class="musicLyric" ref="musicLyric" v-show="isLyricShow">
+    <p v-for="item in lyric" :key="item" :class="{active:(currentTime * 1000>=item.time && currentTime * 1000<item.pre )}">
         {{item.lrc}}
     </p>
   </div>
@@ -40,7 +40,7 @@
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#icon-download"></use>
       </svg>
-      <svg class="icon" aria-hidden="true">
+      <svg class="icon" aria-hidden="true" @click="isLyricShow=!isLyricShow">
         <use xlink:href="#icon-CD"></use>
       </svg>
       <svg class="icon" aria-hidden="true">
@@ -50,13 +50,15 @@
         <use xlink:href="#icon-shuaxin"></use>
       </svg>
     </div>
-    <div class="content"></div>
+    <div class="content">
+      <input type="range" class="range" min="0" :max="duration" v-model="currentTime" step="0.01">
+    </div>
     <div class="footer">
         <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-repeat2"></use>
+        <use xlink:href="#icon-repeat2"></use> 
       </svg>
-      <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-shangyishoushangyige"></use>
+      <svg class="icon" aria-hidden="true" @click="goPlay(-1)">
+        <use xlink:href="#icon-shangyishoushangyige"  ></use>
       </svg>
       <svg class="icon" aria-hidden="true" @click="play" v-show="isbtnShow">
         <use xlink:href="#icon-arrow-"></use>
@@ -64,7 +66,7 @@
       <svg class="icon" aria-hidden="true" @click="play" v-show="!isbtnShow">
         <use xlink:href="#icon-zanting"></use>
       </svg>
-      <svg class="icon" aria-hidden="true">
+      <svg class="icon" aria-hidden="true" @click="goPlay(1)">
         <use xlink:href="#icon-xiayigexiayishou"></use>
       </svg>
       <svg class="icon" aria-hidden="true">
@@ -78,17 +80,34 @@
 import { Vue3Marquee } from "vue3-marquee";
 import { mapMutations,mapState } from 'vuex';
 export default {
-  props: ["sang","play","isbtnShow"],
+  props: ["sang","play","isbtnShow","addDuration"],
   data(){
     return{
         isLyricShow:false
     }
   },
+  mounted(){
+    this.addDuration();
+  },
   methods:{
-    ...mapMutations(['updatedetailShow'])
+    goPlay:function(num){
+
+      let index=this.sangListIndex+num;
+      if(index<0){
+        index=this.sangList.length-1;
+      }else if(index===this.sangList.length){
+        index=0;
+      }
+      this.updatesangListIndex(index)
+    },
+    ...mapMutations([
+    'updatedetailShow',
+    'updatesangListIndex',
+    
+    ])
   },
   computed:{
-    ...mapState(["lyricKist"]),
+    ...mapState(["lyricKist","currentTime","sangListIndex","sangList","duration"]),
     lyric:function(){
         let arr;
         if(this.lyricKist.lyric){
@@ -97,17 +116,38 @@ export default {
             let sec =item.slice(4,6);
             let mill =item.slice(7,10);
             let lrc =item.slice(11,item.length);
-            let time=parseInt(min)*60*1000+parseInt(sec)*1000+mill
+            let time=parseInt(min)*60*1000+parseInt(sec)*1000+parseInt(mill)
             if(isNaN(Number(mill))){
                  mill =item.slice(7,9);
                  lrc =item.slice(10,item.length);
+                 time=parseInt(min)*60*1000+parseInt(sec)*1000+parseInt(mill)
             }
             return{min,sec,mill,lrc,time}
         }) 
+        arr.forEach((item,i) => {
+          if(i===arr.length-1|| isNaN(arr[i+1].time)){
+            item.pre=0
+          }else{
+            item.pre=arr[i+1].time
+          }
+        });
         }
+        console.log(arr);
         return arr;
     }
-  } ,
+  } , 
+  watch:{
+    currentTime:function(newValue){
+      let p=document.querySelector("p.active")
+      if(p&&p.offsetTop>270){
+        this.$refs.musicLyric.scrollTop=p.offsetTop-270
+      }
+      if(newValue===this.duration){
+        this.goPlay(1);
+      }
+    }
+
+  },
   components: {
     Vue3Marquee,
   },
@@ -220,6 +260,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-top: .2rem;
     .top{
         width: 100%;
         height: 50px;
@@ -231,6 +272,13 @@ export default {
             height: .55rem;
             fill:rgb(245,234,234)
         }
+    }
+    .content{
+
+      .range{
+        width: 100%;
+        height: .06rem;
+      }
     }
     .footer{
         width: 100%;
@@ -248,15 +296,20 @@ export default {
 }
 .musicLyric{
     width: 100%;
-    height: 8rem;
+    height: 9rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: .2rem;
     overflow: scroll;
     p{
         color: #5d5b5b;
         margin-bottom: .4rem;
+        text-align: center;
+    }
+    .active{
+      color: #fff;
+      font-size: 24px;
+      text-align: center;
     }
 }
 </style>

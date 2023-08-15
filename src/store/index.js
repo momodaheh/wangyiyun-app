@@ -21,6 +21,7 @@ export default createStore({
     detailShow:false,//歌曲详情页展示
     lyricKist:{},//歌词
     currentTime:0,//当前时间
+    duration:0,//歌曲总时长
   },
   getters: {},
   mutations: {
@@ -40,7 +41,12 @@ export default createStore({
       state.lyricKist=value;
     },
     updateCurrentTime:function(state,value){
+     
       state.currentTime=value;
+    },
+    updateduration:function(state,value){
+     
+      state.duration=value;
     },
   },
   actions: {

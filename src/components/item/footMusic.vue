@@ -21,16 +21,17 @@
         <use xlink:href="#icon-zu"></use>
       </svg>
     </div>
-    <audio
+    <audio @timeupdate="updateTime"
       ref="audio" :src="`https://music.163.com/song/media/outer/url?id=${sangList[sangListIndex].id}`"
     ></audio>
     <van-popup v-model:show="detailShow" position="right" :style="{ width: '100%', height: '100%' }" >
-        <MusicDetail :sang="sangList[sangListIndex]" :play="play" :isbtnShow="isbtnShow" />
+        <MusicDetail :sang="sangList[sangListIndex]" :play="play" :isbtnShow="isbtnShow" :addDuration="addDuration" />
     </van-popup>
   </div>
 </template>
 
 <script>
+
 import { mapMutations, mapState } from "vuex";
 import MusicDetail from './MusicDetail.vue';
 export default {
@@ -45,6 +46,7 @@ export default {
   },
   mounted(){
     this.$store.dispatch("getLyric",this.sangList[this.sangListIndex].id)
+    
   },
   components:{
     MusicDetail,
@@ -58,14 +60,21 @@ export default {
       } else {
         this.$refs.audio.pause();
         this.updateIsbtnShow(true);
+        clearInterval(this.interVal)
       }
     },
     updateTime:function(){
-        setInterval(()=>{
-            this.updateCurrentTime(this.$refs.audio.currentTime)
-        },1000)
+      this.updateCurrentTime(this.$refs.audio.currentTime)
     },
-    ...mapMutations(["updateIsbtnShow", "updatedetailShow","updateCurrentTime"]),
+    addDuration:function(){
+      this.updateduration(this.$refs.audio.duration)
+    },
+    ...mapMutations([
+    "updateIsbtnShow",
+     "updatedetailShow",
+     "updateCurrentTime",
+     "updateduration"
+     ]),
   },
   watch: {
     sangListIndex: function () {

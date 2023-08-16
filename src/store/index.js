@@ -22,11 +22,14 @@ export default createStore({
     detailShow:false,//歌曲详情页展示
     lyricKist:{},//歌词
     currentTime:0,//当前时间
+<<<<<<< HEAD
     duration:0,//歌曲总时长
     isLogin:false,//是否登录
     isfootMusic:true,//是否显示底部组件
     token:"",
     user:{}
+=======
+>>>>>>> parent of ef1bdfc (feat:进度条样式实现)
   },
   getters: {},
   mutations: {
@@ -49,9 +52,9 @@ export default createStore({
       state.lyricKist=value;
     },
     updateCurrentTime:function(state,value){
-     
       state.currentTime=value;
     },
+<<<<<<< HEAD
     updateduration:function(state,value){
      
       state.duration=value;
@@ -67,6 +70,8 @@ export default createStore({
     updateUser:function(state,value){
       state.user=value;
     },
+=======
+>>>>>>> parent of ef1bdfc (feat:进度条样式实现)
   },
   actions: {
     getLyric:async function(context,value){

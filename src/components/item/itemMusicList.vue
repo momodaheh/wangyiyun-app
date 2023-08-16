@@ -68,6 +68,7 @@ export default {
 }
 .musicList{
     background-color: #fff;
+    margin-bottom: 1.4rem;
     .musicItem{
         width: 100%;
         height: 1rem;

@@ -14,3 +14,11 @@ export function getMusicLyric(data){
         url:`/lyric?id=${data}`
     })
 }
+
+///search?keywords= 海阔天空
+export function getSearch(data){
+    return request({
+        method:"GET",
+        url:`/search?keywords=${data}`
+    })
+}

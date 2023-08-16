@@ -1,5 +1,5 @@
 <template>
-  <div class="FootMusic">
+  <div class="FootMusic" >
     <div class="left" @click="updatedetailShow">
       <img :src="sangList[sangListIndex].al.picUrl" alt="" />
       <div>

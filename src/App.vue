@@ -1,14 +1,18 @@
 <template>
   <router-view/>
-  <footMusic/>
+  <FootMusic v-show="isfootMusic" />
 </template>
 
 <script>
-import footMusic from './components/item/footMusic.vue'
+import { mapState } from 'vuex'
+import FootMusic from './components/item/footMusic.vue'
 
 export default {
+  computed:{
+    ...mapState(["isfootMusic"])
+  },
   components:{
-    footMusic,
+    FootMusic,
   }
 }
 </script>

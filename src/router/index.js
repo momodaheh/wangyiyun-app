@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-
+import store from '@/store/index'
 const routes = [
   {
     path: '/',
@@ -11,7 +11,31 @@ const routes = [
     path:'/itemMusic',
     name:'itemMusic',
     component:()=>import('../views/itemMusic.vue')
+  },
+  {
+    path:'/search',
+    name:'Search',
+    component:()=>import('../views/SearchMusic.vue')
+  },
+  {
+    path:'/UserLogin',
+    name:'UserLogin',
+    component:()=>import('../views/UserLogin.vue')
+  },
+  {
+    path:'/InforUser',
+    name:'InforUser',
+    beforeEnter:(to,from,next)=>{
+      if(store.state.isLogin || store.state.token || localStorage.getItem('token')){
+        next()
+      }else{
+        next('/UserLogin')
+      }
+    },
+    component:()=>import('../views/InforUser.vue'),
+    
   }
+  
 ]
 
 const router = createRouter({
@@ -19,4 +43,11 @@ const router = createRouter({
   routes
 })
 
+router.beforeEach((to)=>{
+  if(to.path == "/UserLogin"){
+   store.state.isfootMusic=false
+  }else{
+    store.state.isfootMusic=true
+  }
+})
 export default router

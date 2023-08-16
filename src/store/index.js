@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import {getMusicLyric} from "@/request/api/item"
+import {loginByEmail} from "@/request/api/home"
 export default createStore({
   state: {
     sangList: [
@@ -22,6 +23,10 @@ export default createStore({
     lyricKist:{},//歌词
     currentTime:0,//当前时间
     duration:0,//歌曲总时长
+    isLogin:false,//是否登录
+    isfootMusic:true,//是否显示底部组件
+    token:"",
+    user:{}
   },
   getters: {},
   mutations: {
@@ -30,6 +35,9 @@ export default createStore({
     },
     updateSangList:function(state,value){
       state.sangList=value;
+    },
+    pushSangList:function(state,value){
+      state.sangList.push(value)
     },
     updatesangListIndex:function(state,value){
       state.sangListIndex=value;
@@ -48,12 +56,27 @@ export default createStore({
      
       state.duration=value;
     },
+    updateisLogin:function(state){
+     
+      state.isLogin=true;
+    },
+    updateToken:function(state,value){
+      state.token=value;
+      localStorage.setItem('token',state.token)
+    },
+    updateUser:function(state,value){
+      state.user=value;
+    },
   },
   actions: {
     getLyric:async function(context,value){
       let res=await getMusicLyric(value); 
       console.log(res);
       context.commit("updateLyric",res.data.lrc)
+    },
+    getLogin:async function(context,value){
+      let res = await loginByEmail(value)
+      return res
     }
   },
   modules: {},

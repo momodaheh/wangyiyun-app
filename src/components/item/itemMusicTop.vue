@@ -2,8 +2,8 @@
   <div class="itemMusicTop">
     <img :src="playlist1.coverImgUrl" alt=""  class="bgImg" />
     <div class="left">
-      <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-zuojiantou" @click="$router.go(-1)"></use>
+      <svg class="icon" aria-hidden="true" @click="$router.go(-1)">
+        <use xlink:href="#icon-zuojiantou" ></use>
       </svg>
       <span>歌单</span>
     </div>

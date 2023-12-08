@@ -33,9 +33,15 @@
 <script>
 import { mapMutations } from 'vuex';
 export default {
-  setup() {
+  props: {
+    playlist: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup(props) {
     let playlist1;
-    playlist1 = JSON.parse(sessionStorage.getItem("itemDetail")).playlist;
+    playlist1=props.playlist||JSON.parse(sessionStorage.getItem("itemDetail")).playlist
     return { playlist1 };
 
   },

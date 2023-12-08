@@ -60,12 +60,22 @@
 
 <script>
 export default {
-  setup() {
+  props: {
+    playlist: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup(props) {
     
     //通过props进行传值，判断如果数据拿不到，就获取sessionStorage中的
         // console.log(props);
+        
             let playlist1;
-            playlist1=JSON.parse(sessionStorage.getItem("itemDetail")).playlist
+            playlist1=props.playlist||JSON.parse(sessionStorage.getItem("itemDetail")).playlist
+            // if(!playlist1.creator){
+            //   playlist1=JSON.parse(sessionStorage.getItem("itemDetail")).playlist
+            // }
             return{playlist1}
    
   },

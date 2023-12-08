@@ -60,6 +60,8 @@ export default {
       } else {
         this.$refs.audio.pause();
         this.updateIsbtnShow(true);
+
+        
         clearInterval(this.interVal)
       }
     },

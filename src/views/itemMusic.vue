@@ -1,21 +1,22 @@
 <template>
     
-    <itemMusicTop />
-    <itemMusicList />
+    <itemMusicTop :playlist="state.playlist"/>
+    <itemMusicList :playlist="state.playlist"/>
 </template>
 
 <script>
 import {useRoute}from 'vue-router'
-import {onMounted,reactive,}from 'vue'
+import {onBeforeMount,reactive,}from 'vue'
 import {getMusicItemList} from '../request/api/item'
 import itemMusicTop from '@/components/item/itemMusicTop.vue'
 import itemMusicList from '@/components/item/itemMusicList.vue'
 export default {
     setup(){
         const state =reactive({
-            playlist:{}
+            playlist:{},
+            itemList:[]
         });
-        onMounted(async()=>{
+        onBeforeMount(async()=>{
             let id=useRoute().query.id;
             let res =await getMusicItemList(id);
             state.playlist=res.data.playlist
